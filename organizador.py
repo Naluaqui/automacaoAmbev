@@ -1,7 +1,7 @@
 import os
 import shutil
 
-initialPath = "C:/Users/analu/OneDrive/Área de Trabalho/initialTeste"
+initialPath = "C:/Users/analu/OneDrive/Apps/Designer"
 finalPath = "C:/finalPath"
 
 initialFolder = os.listdir(initialPath)
