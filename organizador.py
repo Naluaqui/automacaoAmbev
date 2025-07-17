@@ -1,9 +1,9 @@
 import os
 import shutil
 
-config_path = os.path.join(os.path.dirname(__file__), "config.txt")
+configPath = os.path.join(os.path.dirname(__file__), "config.txt")
 
-with open(config_path, "r") as file:
+with open(configPath, "r") as file:
     linhas = file.readlines()
     initialPath = linhas[0].strip()
     finalPath = linhas[1].strip()
@@ -16,8 +16,7 @@ finalFolder = os.listdir(finalPath)
 
 while len(initialFolder) != 0:
     for file in initialFolder:
-        local = os.path.join(initialPath, file)
-        moved = False 
+        local = os.path.join(initialPath, file) 
 
         for destinoFile in finalFolder:
             folderKey = destinoFile.split('[')[0].strip().lower()
@@ -30,15 +29,15 @@ while len(initialFolder) != 0:
                 print(f"Movendo {file} para {filePath}")
 
                 shutil.move(local, filePath)
-                moved = True
                 break 
 
-        if not moved:
+        else:
             base, ext = os.path.splitext(file)
             mkdir = os.path.join(finalPath, base) 
             os.makedirs(mkdir, exist_ok=True)
+            renameFile = "[ASSINADO] " + base + ext
 
-            filePath = os.path.join(mkdir, file)
+            filePath = os.path.join(mkdir, renameFile)
             print(f"Criando pasta {mkdir} e movendo {file} para lá")
             shutil.move(local, filePath)
 
