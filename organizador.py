@@ -11,8 +11,6 @@ def renameFiles(file):
     shutil.move(local, newFilePath)
     return newFilePath
 
-timeOut = 120
-
 configPath = os.path.join(os.path.dirname(__file__), "config.txt")
 
 with open(configPath, "r", encoding="utf-8") as file:
