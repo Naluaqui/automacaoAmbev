@@ -2,23 +2,28 @@ import os
 import shutil
 import time
 
+def renameFiles(file):
+    base, ext = os.path.splitext(file)
+    mkdir = os.path.join(finalPath, base) 
+    os.makedirs(mkdir, exist_ok=True)
+    renameFile = "[ASSINADO] " + base + ext
+    newFilePath = os.path.join(mkdir, renameFile)
+    shutil.move(local, newFilePath)
+    return newFilePath
+
 timeOut = 120
 
 configPath = os.path.join(os.path.dirname(__file__), "config.txt")
 
-with open(configPath, "r") as file:
+with open(configPath, "r", encoding="utf-8") as file:
     linhas = file.readlines()
     initialPath = linhas[0].strip()
     finalPath = linhas[1].strip()
 
-print("Pasta inicial:", initialPath)
-print("Pasta final:", finalPath)
-
-initialFolder = os.listdir(initialPath)
-finalFolder = os.listdir(finalPath)
-
 while True:
     initialFolder = os.listdir(initialPath)
+    finalFolder = os.listdir(finalPath)
+
     if len(initialFolder) == 0:
         time.sleep(60*2)
     else:
@@ -27,25 +32,8 @@ while True:
 
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
-                if folderKey in file.lower():
-                    base, ext = os.path.splitext(file)
-                    renameFile = "[ASSINADO] " + base + ext
+                for folderKey in file.lower():
+                    renameFiles(file)
+                    break
 
-                    filePathMatch = os.path.join(finalPath, destinoFile)
-                    filePath = os.path.join(filePathMatch, renameFile)
-                    print(f"Movendo {file} para {filePath}")
-
-                    shutil.move(local, filePath)
-                    break 
-
-            else:
-                base, ext = os.path.splitext(file)
-                mkdir = os.path.join(finalPath, base) 
-                os.makedirs(mkdir, exist_ok=True)
-                renameFile = "[ASSINADO] " + base + ext
-
-                filePath = os.path.join(mkdir, renameFile)
-                print(f"Criando pasta {mkdir} e movendo {file} para lá")
-                shutil.move(local, filePath)
-
-    initialFolder = os.listdir(initialPath) 
+    initialFolder = os.listdir(initialPath)
