@@ -3,7 +3,8 @@ import os
 configTxt = os.path.join(os.path.dirname(__file__), "arquivo.txt")
 
 try:
-    resposta = inputimeout(prompt='Digite seu email: ', timeout=20)
+    resposta = inputimeout(prompt='Digite o caminho da pasta INICIAL', timeout=20)
+    resp = input("teste")
     if resposta != '':
         with open(configTxt, "w", encoding="utf=8") as file:
             file.write(resposta)
