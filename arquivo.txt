@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 hahah
 hehehe
+=======
+erro de duplicação
+duplicou?
+
+>>>>>>> dev
