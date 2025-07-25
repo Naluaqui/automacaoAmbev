@@ -16,8 +16,8 @@ def renameFiles(file, local):
 
 def configFolderPath():
     try:
-        configFolder1 = inputimeout(prompt='Digite o caminho da pasta INICIAL: ', timeout=20)
-        configFolder2 = inputimeout(prompt='Digite o caminho da pasta FINAL: ', timeout=20)
+        configFolder1 = inputimeout(prompt='Digite o caminho da pasta INICIAL: ', timeout=120)
+        configFolder2 = inputimeout(prompt='Digite o caminho da pasta FINAL: ', timeout=120)
         if configFolder1 != '' and configFolder2 != '':
             with open(configPath, "r", encoding="utf-8") as file:
                 lines = file.readlines()
@@ -32,6 +32,7 @@ def configFolderPath():
 
     print(f"Você digitou: {configFolder1}")
     print(f"Você digitou: {configFolder2}")
+    time.sleep(10)
 
 with open(configPath, "r", encoding="utf-8") as file:
     lines = file.readlines()
@@ -44,6 +45,7 @@ while True:
 
     if len(initialFolder) == 0:
         configFolderPath()
+    
     else:
         for file in initialFolder:
             local = os.path.join(initialPath, file) 
@@ -55,3 +57,4 @@ while True:
                     break
 
     initialFolder = os.listdir(initialPath)
+    time.sleep(10)
