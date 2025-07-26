@@ -53,9 +53,6 @@ def configFolderPath():
         configFolder2 = None
         print("\nTempo esgotado!")
 
-    print(f"\nVocê digitou: {configFolder1}")
-    print(f"Você digitou: {configFolder2}")
-
 while True:
     while os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
         configFolderPath()
@@ -71,11 +68,14 @@ while True:
         for file in initialFolder:
             local = os.path.join(initialPath, file) 
 
-            for destinoFile in finalFolder:
-                folderKey = destinoFile.split('[')[0].strip().lower()
-                if folderKey in file.lower():
-                    renameFiles(file, local)
-                    break
+            try:
+                for destinoFile in finalFolder:
+                    folderKey = destinoFile.split('[')[0].strip().lower()
+                    for folderKey in file.lower():
+                        renameFiles(file, local)
+                        break
+            except:
+                break
 
     initialFolder = os.listdir(initialPath)
     time.sleep(5)
