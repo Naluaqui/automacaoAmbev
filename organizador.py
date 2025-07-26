@@ -12,39 +12,60 @@ def renameFiles(file, local):
     renameFile = "[ASSINADO] " + base + ext
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
+    print(f"Movendo arquivo: {file} para {newFilePath}")
     return newFilePath
-
-def configFolderPath():
-    try:
-        configFolder1 = inputimeout(prompt='Digite o caminho da pasta INICIAL: ', timeout=120)
-        configFolder2 = inputimeout(prompt='Digite o caminho da pasta FINAL: ', timeout=120)
-        if configFolder1 != '' and configFolder2 != '':
-            with open(configPath, "r", encoding="utf-8") as file:
-                lines = file.readlines()
-                lines[0] = configFolder1 + "\n"
-                lines[1] = configFolder2 + "\n"
-            with open(configPath, "w", encoding="utf-8") as file:
-                file.writelines(lines)
-    except TimeoutOccurred:
-        configFolder1 = None
-        configFolder2 = None
-        print("\nTempo esgotado!")
-
-    print(f"Você digitou: {configFolder1}")
-    print(f"Você digitou: {configFolder2}")
-    time.sleep(10)
 
 with open(configPath, "r", encoding="utf-8") as file:
     lines = file.readlines()
     initialPath = lines[0].strip()
     finalPath = lines[1].strip()
 
+def configFolderPath():
+    try:
+        
+        try:
+            with open(configPath, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+                initialPath = lines[0].strip()
+                finalPath = lines[1].strip()
+        except:
+            initialPath = ""
+            finalPath = ""
+
+        if os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
+            print("Pasta INICIAL ou FINAL não encontrada!\n")
+            configFolder1 = input('Digite o caminho da pasta INICIAL: ')
+            configFolder2 = input('Digite o caminho da pasta FINAL: ')
+
+        else:
+            print(f"\nPasta INICIAL: {initialPath}")
+            configFolder1 = inputimeout(prompt='Digite o caminho da pasta INICIAL: ', timeout=5)
+            print(f"\nPasta FINAL: {finalPath}")
+            configFolder2 = inputimeout(prompt='Digite o caminho da pasta FINAL: ', timeout=5)
+            
+        with open(configPath, "w", encoding="utf-8") as file:
+            file.writelines([configFolder1 + "\n", configFolder2 + "\n"])
+
+        return configFolder1.strip(), configFolder2.strip()
+    
+    except TimeoutOccurred:
+        configFolder1 = None
+        configFolder2 = None
+        print("\nTempo esgotado!")
+
+    print(f"\nVocê digitou: {configFolder1}")
+    print(f"Você digitou: {configFolder2}")
+
 while True:
+    while os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
+        configFolderPath()
+        
     initialFolder = os.listdir(initialPath)
     finalFolder = os.listdir(finalPath)
 
     if len(initialFolder) == 0:
         configFolderPath()
+        time.sleep(5)
     
     else:
         for file in initialFolder:
@@ -52,9 +73,9 @@ while True:
 
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
-                for folderKey in file.lower():
+                if folderKey in file.lower():
                     renameFiles(file, local)
                     break
 
     initialFolder = os.listdir(initialPath)
-    time.sleep(10)
+    time.sleep(5)
