@@ -34,14 +34,14 @@ def configFolderPath():
 
         if os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
             print("Pasta INICIAL ou FINAL não encontrada!\n")
-            configFolder1 = input('Digite o caminho da pasta INICIAL: ')
-            configFolder2 = input('Digite o caminho da pasta FINAL: ')
+            configFolder1 = input("Digite o caminho da pasta INICIAL: ")
+            configFolder2 = input("Digite o caminho da pasta FINAL: ")
 
         else:
             print(f"\nPasta INICIAL: {initialPath}")
-            configFolder1 = inputimeout(prompt='Digite o caminho da pasta INICIAL: ', timeout=5)
+            configFolder1 = inputimeout(prompt="Digite o caminho da pasta INICIAL: ", timeout=5)
             print(f"\nPasta FINAL: {finalPath}")
-            configFolder2 = inputimeout(prompt='Digite o caminho da pasta FINAL: ', timeout=5)
+            configFolder2 = inputimeout(prompt="Digite o caminho da pasta FINAL: ", timeout=5)
             
         with open(configPath, "w", encoding="utf-8") as file:
             file.writelines([configFolder1 + "\n", configFolder2 + "\n"])
