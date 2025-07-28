@@ -3,7 +3,22 @@ import shutil
 import time
 from inputimeout import inputimeout, TimeoutOccurred
 
-configPath = os.path.join(os.path.dirname(__file__), "config.txt")
+configPath = ""
+
+def creatTXT():
+    global configPath
+    appData = os.getenv("APPDATA")
+    folderApp = os.path.join(appData, "MyApp")
+    os.makedirs(folderApp, exist_ok=True)
+    configPath = os.path.join(folderApp, "config.txt")
+
+    if not os.path.exists(configPath):
+        with open(configPath, "w", encoding="utf-8") as f:
+            f.write("\n" * 4)
+
+    print(f"'config.txt' criado em: {configPath}")
+
+creatTXT()
 
 def renameFiles(file, local):
     base, ext = os.path.splitext(file)
@@ -21,8 +36,8 @@ with open(configPath, "r", encoding="utf-8") as file:
     finalPath = lines[1].strip()
 
 def configFolderPath():
+    global configPath
     try:
-        
         try:
             with open(configPath, "r", encoding="utf-8") as file:
                 lines = file.readlines()
@@ -54,6 +69,7 @@ def configFolderPath():
         print("\nTempo esgotado!")
 
 while True:
+
     while os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
         configFolderPath()
         
