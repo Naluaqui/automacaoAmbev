@@ -87,23 +87,30 @@ while True:
     initialFolder = os.listdir(initialPath)
     finalFolder = os.listdir(finalPath)
 
-    if len(initialFolder) == 0:
+    while len(initialFolder) == 0:
+        with open(configPath, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+                initialPath = lines[0].strip()
+                
+        initialFolder = os.listdir(initialPath)
+
+        print(len(initialFolder))
+        
         configFolderPath()
         time.sleep(5)
             
-    else:
-        for file in initialFolder:
-            local = os.path.join(initialPath, file) 
-            print(local)
+    for file in initialFolder:
+        local = os.path.join(initialPath, file) 
+        print(local)
 
-            try:
-                for destinoFile in finalFolder:
-                    folderKey = destinoFile.split('[')[0].strip().lower()
-                    for folderKey in file.lower():
-                        renameFiles(file, local)
-                        break
-            except:
-                break
+        try:
+            for destinoFile in finalFolder:
+                folderKey = destinoFile.split('[')[0].strip().lower()
+                for folderKey in file.lower():
+                    renameFiles(file, local)
+                    break
+        except:
+            break
 
     initialFolder = os.listdir(initialPath)
     time.sleep(5)
