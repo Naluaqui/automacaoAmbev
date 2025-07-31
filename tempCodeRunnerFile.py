@@ -90,7 +90,7 @@ while True:
     if len(initialFolder) == 0:
         configFolderPath()
         time.sleep(5)
-            
+    
     else:
         for file in initialFolder:
             local = os.path.join(initialPath, file) 
