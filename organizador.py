@@ -18,11 +18,10 @@ def inicialSettings():
 inicialSettings()
 configPath = configPathTeste
 
-def renameFiles(file, local):
-    base, ext = os.path.splitext(file)
-    mkdir = os.path.join(finalPath, base) 
+def renameFiles(file, local, destinoFile):
+    mkdir = os.path.join(finalPath, destinoFile) 
     os.makedirs(mkdir, exist_ok=True)
-    renameFile = "[ASSINADO] " + base + ext
+    renameFile = "[ASSINADO] " + file
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
     print(f"Movendo arquivo: {file} para {newFilePath}")
@@ -100,14 +99,19 @@ while True:
         time.sleep(5)
             
     for file in initialFolder:
-        local = os.path.join(initialPath, file) 
+        if "aditivo" in file.lower():
+            keyFile = file.lower().split("aditivo")[1].strip()
+            print(keyFile)
+        local = os.path.join(initialPath, file)
         print(local)
 
         try:
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
-                for folderKey in file.lower():
-                    renameFiles(file, local)
+                print(folderKey)
+                if folderKey in keyFile:
+                    print(f"\nArquivo encontrado: {keyFile} -> {folderKey}")
+                    renameFiles(file, local, destinoFile)
                     break
         except:
             break
