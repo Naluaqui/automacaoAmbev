@@ -87,11 +87,12 @@ while True:
     initialFolder = os.listdir(initialPath)
     finalFolder = os.listdir(finalPath)
 
+
     while len(initialFolder) == 0:
         with open(configPath, "r", encoding="utf-8") as file:
                 lines = file.readlines()
                 initialPath = lines[0].strip()
-                
+              
         initialFolder = os.listdir(initialPath)
         print(f"\n🔍 Verificando arquivos na pasta inicial...\nNúmeros de arquivos entrados: {len(initialFolder)}")
         
@@ -99,18 +100,30 @@ while True:
         time.sleep(5)
             
     for file in initialFolder:
+        
         if "aditivo" in file.lower():
-            keyFile = file.lower().split("aditivo")[1].strip()
+            piecesName = file.lower().split("aditivo")[1].strip()
+            keyFile = os.path.splitext(piecesName)[0].strip()
+        else:
+            keyFile = os.path.splitext(file)[0].lower().strip()
+
         local = os.path.join(initialPath, file)
 
         try:
+            
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
                 time.sleep(1)
+                
                 if folderKey in keyFile:
-                    print(f"\nArquivo encontrado: {keyFile} -> {folderKey}")
+                    print(f"\n➡ Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
-                    break
+                    break 
+
+                else:
+                    print(f"\n ➡ Arquivo encontrado: {file}")
+                    renameFiles(file, local, keyFile)
+           
         except:
             break
 
