@@ -1,6 +1,7 @@
 import os
 import shutil
 import time
+import re
 from inputimeout import inputimeout, TimeoutOccurred
 
 configPathTeste = ""
@@ -110,7 +111,13 @@ while True:
         else:
             keyFile = os.path.splitext(file)[0].lower().strip()
 
+        match = re.search(r'CW\w{6}', file)
+        cw = match.group()
+        
+        keyFile = file.replace(f"{cw}", "").strip()
+        keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").strip()
         keyFile = keyFile.strip().lower()
+
         local = os.path.join(initialPath, file)
 
         try:
