@@ -104,9 +104,13 @@ while True:
         if "aditivo" in file.lower():
             piecesName = file.lower().split("aditivo")[1].strip()
             keyFile = os.path.splitext(piecesName)[0].strip()
+        elif "patrocínio" in file.lower():
+            piecesName = file.lower().split("patrocínio")[1].strip()
+            keyFile = os.path.splitext(piecesName)[0].strip()
         else:
             keyFile = os.path.splitext(file)[0].lower().strip()
 
+        keyFile = keyFile.strip().lower()
         local = os.path.join(initialPath, file)
 
         try:
@@ -115,18 +119,24 @@ while True:
                 renameFiles(file, local, keyFile)
                 continue
 
+            findFolder = False
+
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
+                if "sj" in folderKey:
+                    folderKey = folderKey.replace("SJ", "").strip()
+                    print(f"⚠ Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
                 
-                if folderKey in keyFile:
+                if folderKey in keyFile or keyFile in folderKey:
                     print(f"\n➡ Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
+                    findFolder = True
                     break 
 
-                else:
-                    print(f"\n ➡ Arquivo encontrado: {file}")
-                    renameFiles(file, local, keyFile)
+            if not findFolder:
+                print(f"\n ➡ Nenhuma pasta encontrada para o arquivo {file}, criando pasta nova")
+                renameFiles(file, local, keyFile)
            
         except:
             break
