@@ -110,7 +110,11 @@ while True:
         local = os.path.join(initialPath, file)
 
         try:
-            
+            if len(finalFolder) == 0:
+                print(f"\n➡ Arquivo encontrado: {file}")
+                renameFiles(file, local, keyFile)
+                continue
+
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
                 time.sleep(1)
