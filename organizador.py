@@ -2,6 +2,7 @@ import os
 import shutil
 import time
 import re
+import ctypes
 from inputimeout import inputimeout, TimeoutOccurred
 
 configPathTeste = ""
@@ -49,7 +50,8 @@ def configFolderPath():
             finalPath = ""
 
         if os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
-            print(f"{30*"="}\nINICIALIZAÇÃO DO SCRIPT - ORGANIZADOR DE ARQUIVOS\n{30*"="}\n")
+            ctypes.windll.user32.MessageBoxW(0, "Script precisa ser configurado", "Alerta de configuração", 0x40)
+            print(f"{50*"="}\nINICIALIZAÇÃO DO SCRIPT - ORGANIZADOR DE ARQUIVOS\n{50*"="}\n")
             configFolder1 = input("Digite o caminho da pasta INICIAL: ")
             configFolder2 = input("Digite o caminho da pasta FINAL: ")
 
@@ -70,6 +72,8 @@ def configFolderPath():
         print("\n(!!) Tempo esgotado!\n")
 
 while True:
+    print("inicializando o script...")
+
     try:
         inicialSettings()
         configPath = configPathTeste
