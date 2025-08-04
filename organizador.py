@@ -101,22 +101,22 @@ while True:
         time.sleep(5)
             
     for file in initialFolder:
-        
-        if "aditivo" in file.lower():
-            piecesName = file.lower().split("aditivo")[1].strip()
-            keyFile = os.path.splitext(piecesName)[0].strip()
-        elif "patrocínio" in file.lower():
-            piecesName = file.lower().split("patrocínio")[1].strip()
-            keyFile = os.path.splitext(piecesName)[0].strip()
-        else:
-            keyFile = os.path.splitext(file)[0].lower().strip()
 
-        match = re.search(r'CW\w{6}', file)
-        cw = match.group()
-        
-        keyFile = file.replace(f"{cw}", "").strip()
-        keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").strip()
-        keyFile = keyFile.strip().lower()
+        keyFile = os.path.splitext(file)[0].lower()
+        match = re.search(r'cw\w{6}', keyFile, re.IGNORECASE)
+
+        if match:
+            keyFile = keyFile.replace(match.group(), '')
+            
+            if "aditivo" in keyFile:
+                keyFile = keyFile.split("aditivo")[1]
+            elif "patrocínio" in keyFile:
+                keyFile = keyFile.split("patrocínio")[1]
+            elif "[" in keyFile:
+                keyFile = keyFile.split("[")[0]
+
+        keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").replace("vf", "")
+        keyFile = " ".join(keyFile.split()).strip()
 
         local = os.path.join(initialPath, file)
 
