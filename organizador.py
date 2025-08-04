@@ -24,8 +24,8 @@ def renameFiles(file, local, destinoFile):
     renameFile = "[ASSINADO] " + file
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
-    print(f"\n📁 Movendo arquivo: {file} para {newFilePath}")
-    print(f"\n✅ Arquivo movido com sucesso!\n\n{25*"="}\n\n")
+    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}")
+    print(f"\n**OK** Arquivo movido com sucesso!\n\n{25*"="}\n\n")
     return newFilePath
 
 with open(configPath, "r", encoding="utf-8") as file:
@@ -48,14 +48,14 @@ def configFolderPath():
             finalPath = ""
 
         if os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
-            print(f"{15*"="}\n🚀 INICIALIZAÇÃO DO SCRIPT - ORGANIZADOR DE ARQUIVOS\n{15*"="}\n")
+            print(f"{30*"="}\nINICIALIZAÇÃO DO SCRIPT - ORGANIZADOR DE ARQUIVOS\n{30*"="}\n")
             configFolder1 = input("Digite o caminho da pasta INICIAL: ")
             configFolder2 = input("Digite o caminho da pasta FINAL: ")
 
         else:
-            print(f"\n📂 Pasta inicial atual: {initialPath}")
+            print(f"\n --> Pasta inicial atual: {initialPath}")
             configFolder1 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
-            print(f"\n📂 Pasta final atual: {finalPath}")
+            print(f"\n --> Pasta final atual: {finalPath}")
             configFolder2 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
             
         with open(configPath, "w", encoding="utf-8") as file:
@@ -66,7 +66,7 @@ def configFolderPath():
     except TimeoutOccurred:
         configFolder1 = None
         configFolder2 = None
-        print("\n⏰ Tempo esgotado!\n")
+        print("\n(!!) Tempo esgotado!\n")
 
 while True:
     try:
@@ -94,7 +94,7 @@ while True:
                 initialPath = lines[0].strip()
               
         initialFolder = os.listdir(initialPath)
-        print(f"\n🔍 Verificando arquivos na pasta inicial...\nNúmeros de arquivos entrados: {len(initialFolder)}")
+        print(f"\n>>> >>> Verificando arquivos na pasta inicial...\nNúmeros de arquivos entrados: {len(initialFolder)}")
         
         configFolderPath()
         time.sleep(5)
@@ -115,7 +115,7 @@ while True:
 
         try:
             if len(finalFolder) == 0:
-                print(f"\n➡ Arquivo encontrado: {file}")
+                print(f"\n --> Arquivo encontrado: {file}")
                 renameFiles(file, local, keyFile)
                 continue
 
@@ -125,17 +125,17 @@ while True:
                 folderKey = destinoFile.split('[')[0].strip().lower()
                 if "sj" in folderKey:
                     folderKey = folderKey.replace("SJ", "").strip()
-                    print(f"⚠ Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
+                    print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
                 
                 if folderKey in keyFile or keyFile in folderKey:
-                    print(f"\n➡ Arquivo encontrado: {keyFile} -> {folderKey}")
+                    print(f"\n --> Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
                     findFolder = True
                     break 
 
             if not findFolder:
-                print(f"\n ➡ Nenhuma pasta encontrada para o arquivo {file}, criando pasta nova")
+                print(f"\n --> Nenhuma pasta encontrada para o arquivo {file}, criando pasta nova")
                 renameFiles(file, local, keyFile)
            
         except:
