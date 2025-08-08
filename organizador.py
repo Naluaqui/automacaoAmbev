@@ -50,7 +50,7 @@ def configFolderPath():
             finalPath = ""
 
         if os.path.exists(initialPath) is False or os.path.exists(finalPath) is False:
-            ctypes.windll.user32.MessageBoxW(0, "Script precisa ser configurado", "Alerta de configuração", 0x40)
+            ctypes.windll.user32.MessageBoxW(0, "PASTAS NÃO LOCALIZADAS\nCaminhos inválidos, configure novamente!!!\n\nOs caminhos das pastas configurados podem ter sido alterados ou atualizados, ou a permissão de acesso às pastas da rede expirou, exigindo que você faça uma nova autenticação para liberar o acesso.\n\n-> Recomenda-se verificar se as pastas existem nos caminhos configurados e, se forem pastas de rede, confirmar se a autenticação ou conexão foi restabelecida.", "Organizador", 0x10 | 0x1000)
             print(f"{50*"="}\nINICIALIZAÇÃO DO SCRIPT - ORGANIZADOR DE ARQUIVOS\n{50*"="}\n")
             configFolder1 = input("Digite o caminho da pasta INICIAL: ")
             configFolder2 = input("Digite o caminho da pasta FINAL: ")
@@ -134,12 +134,18 @@ while True:
 
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
+                if "[confidencial]" in folderKey:
+                    folderKey = folderKey.replace("[confidencial]", "").strip()
+                else:
+                    continue
                 if "sj" in folderKey:
                     folderKey = folderKey.replace("SJ", "").strip()
-                    print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
+                else:
+                    continue
+                print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
                 
-                if folderKey in keyFile or keyFile in folderKey:
+                if folderKey in keyFile:
                     print(f"\n --> Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
                     findFolder = True
