@@ -111,13 +111,12 @@ while True:
 
         if match:
             keyFile = keyFile.replace(match.group(), '')
-            
-            if "aditivo" in keyFile:
-                keyFile = keyFile.split("aditivo")[1]
-            elif "patrocínio" in keyFile:
-                keyFile = keyFile.split("patrocínio")[1]
-            elif "[" in keyFile:
-                keyFile = keyFile.split("[")[0]
+        if "aditivo" in keyFile:
+            keyFile = keyFile.split("aditivo")[1]
+        if "patrocínio" in keyFile:
+            keyFile = keyFile.split("patrocínio")[1]
+        if "[" in keyFile:
+            keyFile = keyFile.split("[")[0]
 
         keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").replace("vf", "")
         keyFile = " ".join(keyFile.split()).strip()
@@ -134,14 +133,12 @@ while True:
 
             for destinoFile in finalFolder:
                 folderKey = destinoFile.split('[')[0].strip().lower()
+
                 if "[confidencial]" in folderKey:
                     folderKey = folderKey.replace("[confidencial]", "").strip()
-                else:
-                    continue
                 if "sj" in folderKey:
-                    folderKey = folderKey.replace("SJ", "").strip()
-                else:
-                    continue
+                    folderKey = folderKey.replace("sj", "").strip()
+                
                 print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
                 
