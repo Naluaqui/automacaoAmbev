@@ -57,9 +57,9 @@ def configFolderPath():
 
         else:
             print(f"\n --> Pasta inicial atual: {initialPath}")
-            configFolder1 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
+            configFolder1 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=7200)
             print(f"\n --> Pasta final atual: {finalPath}")
-            configFolder2 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
+            configFolder2 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=7200)
             
         with open(configPath, "w", encoding="utf-8") as file:
             file.writelines([configFolder1 + "\n", configFolder2 + "\n"])
@@ -73,6 +73,7 @@ def configFolderPath():
 
 while True:
     print("inicializando o script...")
+    ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 
     try:
         inicialSettings()
@@ -113,6 +114,10 @@ while True:
             keyFile = keyFile.replace(match.group(), '')
         if "aditivo" in keyFile:
             keyFile = keyFile.split("aditivo")[1]
+        if 'vf' in keyFile:
+            keyFile = keyFile.replace('vf', '')
+        if 'réveillon' in keyFile:
+            keyFile = keyFile.replace('vf', '')
         if "patrocínio" in keyFile:
             keyFile = keyFile.split("patrocínio")[1]
         if "[" in keyFile:
@@ -138,21 +143,31 @@ while True:
                     folderKey = folderKey.replace("[confidencial]", "").strip()
                 if "sj" in folderKey:
                     folderKey = folderKey.replace("sj", "").strip()
+                if "réveillon" in folderKey:
+                    folderKey = folderKey.replace("réveillon", "").strip()
+                if "proposta" in folderKey:
+                    folderKey = folderKey.replace("proposta", "").strip()
                 
                 print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
                 
+                if folderKey == '':
+                    renameFiles(file, local, keyFile)
+                    break
+
                 if folderKey in keyFile:
                     print(f"\n --> Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
                     findFolder = True
                     break 
+                else:
+                    print("Sem match")
 
             if not findFolder:
                 print(f"\n --> Nenhuma pasta encontrada para o arquivo {file}, criando pasta nova")
                 renameFiles(file, local, keyFile)
            
-        except:
+        except Exception as e:
             break
 
     initialFolder = os.listdir(initialPath)
