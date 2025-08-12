@@ -145,7 +145,7 @@ while True:
         except Exception as e:
             with open("error_log.txt", "a", encoding="utf-8") as log_file:
                 log_file.write(f"Erro: {e}\n")
-            break
+            continue
 
     initialFolder = os.listdir(initialPath)
     time.sleep(5)
