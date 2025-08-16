@@ -72,7 +72,6 @@ def configFolderPath():
         print("\n(!!) Tempo esgotado!\n")
 
 while True:
-    print("inicializando o script...")
     ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 
     try:
@@ -108,22 +107,17 @@ while True:
     for file in initialFolder:
 
         keyFile = os.path.splitext(file)[0].lower()
-        match = re.search(r'cw\w{6}', keyFile, re.IGNORECASE)
+        keyFile = re.sub(r'\b\w{1}\b', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'\b\w{2}\b', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'cw\w{6}', '', keyFile, flags=re.IGNORECASE)
 
-        if match:
-            keyFile = keyFile.replace(match.group(), '')
-        if "aditivo" in keyFile:
-            keyFile = keyFile.split("aditivo")[1]
-        if 'vf' in keyFile:
-            keyFile = keyFile.replace('vf', '')
-        if 'réveillon' in keyFile:
-            keyFile = keyFile.replace('vf', '')
-        if "patrocínio" in keyFile:
-            keyFile = keyFile.split("patrocínio")[1]
+        for keyword in ["aditivo", "patrocínio", "réveillon", "vf", "pdf", "proposta", "sj", "-", "_", "(", ")"]:
+            if keyword in keyFile:
+                keyFile = keyFile.replace(keyword, "").strip()
+
         if "[" in keyFile:
             keyFile = keyFile.split("[")[0]
 
-        keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").replace("vf", "")
         keyFile = " ".join(keyFile.split()).strip()
 
         local = os.path.join(initialPath, file)
