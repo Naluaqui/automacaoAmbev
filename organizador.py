@@ -131,16 +131,12 @@ while True:
             findFolder = False
 
             for destinoFile in finalFolder:
-                folderKey = destinoFile.split('[')[0].strip().lower()
+                
+                for keyword in ["[confidencial]", "patrocínio", "réveillon", "vf", "pdf", "proposta", "sj", "-", "_", "(", ")"]:
+                    if keyword in keyFile:
+                        keyFile = keyFile.replace(keyword, "").strip()
 
-                if "[confidencial]" in folderKey:
-                    folderKey = folderKey.replace("[confidencial]", "").strip()
-                if "sj" in folderKey:
-                    folderKey = folderKey.replace("sj", "").strip()
-                if "réveillon" in folderKey:
-                    folderKey = folderKey.replace("réveillon", "").strip()
-                if "proposta" in folderKey:
-                    folderKey = folderKey.replace("proposta", "").strip()
+                folderKey = destinoFile.split('[')[0].strip().lower()
                 
                 print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
