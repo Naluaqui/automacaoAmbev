@@ -174,7 +174,9 @@ while True:
                 renameFiles(file, local, keyFile)
            
         except Exception as e:
-            break
+            with open("error_log.txt", "a", encoding="utf-8") as log_file:
+                log_file.write(f"Erro: {e}\n")
+            continue
 
     initialFolder = os.listdir(initialPath)
     time.sleep(5)

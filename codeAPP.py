@@ -26,8 +26,12 @@ def renameFiles(file, local, destinoFile):
     renameFile = "[ASSINADO] " + file
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
-    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}")
-    print(f"\n**OK** Arquivo movido com sucesso!\n\n{25*"="}\n\n")
+    count = 0
+    for doc in os.listdir(mkdir):
+        if doc == renameFile:
+            count += 1
+            if count == 2:
+                os.remove(doc)
     return newFilePath
 
 with open(configPath, "r", encoding="utf-8") as file:
@@ -57,8 +61,8 @@ def configFolderPath():
     except TimeoutOccurred:
         time.sleep(1)
 
+ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 while True:
-    ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 
     inicialSettings()
     configPath = configPathTeste
@@ -88,22 +92,20 @@ while True:
     for file in initialFolder:
 
         keyFile = os.path.splitext(file)[0].lower()
-        match = re.search(r'cw\w{6}', keyFile, re.IGNORECASE)
+        keyFile = re.sub(r'.{2}aditivo', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'\b\w{1}\b', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'\b\w{2}\b', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'cw\w{6}', '', keyFile, flags=re.IGNORECASE)
+        keyFile = re.sub(r'\d{2,}', '', keyFile)
+        keyFile = re.sub(r" {2,}", '', keyFile)
 
-        if match:
-            keyFile = keyFile.replace(match.group(), '')
-        if "aditivo" in keyFile:
-            keyFile = keyFile.split("aditivo")[1]
-        if 'vf' in keyFile:
-            keyFile = keyFile.replace('vf', '')
-        if 'réveillon' in keyFile:
-            keyFile = keyFile.replace('vf', '')
-        if "patrocínio" in keyFile:
-            keyFile = keyFile.split("patrocínio")[1]
         if "[" in keyFile:
             keyFile = keyFile.split("[")[0]
 
-        keyFile = keyFile.replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").replace("vf", "")
+        for keyword in ["aditivo", "patrocínio", "patrocinio", "réveillon", "reveillon", "contrato", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+            if keyword in keyFile:
+                keyFile = keyFile.replace(keyword, "").strip()
+
         keyFile = " ".join(keyFile.split()).strip()
 
         local = os.path.join(initialPath, file)
@@ -116,16 +118,18 @@ while True:
             findFolder = False
 
             for destinoFile in finalFolder:
-                folderKey = destinoFile.split('[')[0].strip().lower()
+                folderKey = destinoFile.lower()
+                folderKey = folderKey.replace('[confidencial]', '')
+                folderKey = folderKey.split('[')[0].strip()
+                folderKey = re.sub(r'\b\w{1}\b', '', folderKey, flags=re.IGNORECASE)
+                folderKey = re.sub(r'\b\w{2}\b', '', folderKey, flags=re.IGNORECASE)
+                folderKey = re.sub(r'\d{2,}', '', folderKey)
+                folderKey = re.sub(r" {2,}", " ", folderKey)
 
-                if "[confidencial]" in folderKey:
-                    folderKey = folderKey.replace("[confidencial]", "").strip()
-                if "sj" in folderKey:
-                    folderKey = folderKey.replace("sj", "").strip()
-                if "réveillon" in folderKey:
-                    folderKey = folderKey.replace("réveillon", "").strip()
-                if "proposta" in folderKey:
-                    folderKey = folderKey.replace("proposta", "").strip()
+                for keyword in ["confidencial", "patrocínio", "patrocinio", "réveillon", "reveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+                    if keyword in folderKey:
+                        folderKey = folderKey.replace(keyword, "").strip()
+                folderKey = " ".join(folderKey.split()).strip()
                 
                 time.sleep(1)
                 
@@ -134,7 +138,6 @@ while True:
                     break
 
                 if folderKey in keyFile:
-                    print(f"\n --> Arquivo encontrado: {keyFile} -> {folderKey}")
                     renameFiles(file, local, destinoFile)
                     findFolder = True
                     break 
