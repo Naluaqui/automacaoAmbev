@@ -3,6 +3,7 @@ import os
 from tkinter import filedialog
 
 
+
 ctk.set_appearance_mode("dark")
 
 app = ctk.CTk()
@@ -14,6 +15,7 @@ def fileExplorer():
     directory = filedialog.askdirectory(title="Selecione a pasta")
     if directory:
         os.startfile(directory)
+    
 
 tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
 tittle.pack(pady=10)
