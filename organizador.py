@@ -57,9 +57,9 @@ def configFolderPath():
 
         else:
             print(f"\n --> Pasta inicial atual: {initialPath}")
-            configFolder1 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=7200)
+            configFolder1 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
             print(f"\n --> Pasta final atual: {finalPath}")
-            configFolder2 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=7200)
+            configFolder2 = inputimeout(prompt="Quer mudar? Digite o novo caminho ou aguarde para manter:\n>", timeout=5)
             
         with open(configPath, "w", encoding="utf-8") as file:
             file.writelines([configFolder1 + "\n", configFolder2 + "\n"])
@@ -71,8 +71,8 @@ def configFolderPath():
         configFolder2 = None
         print("\n(!!) Tempo esgotado!\n")
 
+ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 while True:
-    ctypes.windll.user32.MessageBoxW(0, "Iniciando Script", "Organizador", 0x40 | 0x1000)
 
     try:
         inicialSettings()
@@ -107,16 +107,19 @@ while True:
     for file in initialFolder:
 
         keyFile = os.path.splitext(file)[0].lower()
+        keyFile = re.sub(r'.{2}aditivo', '', keyFile, flags=re.IGNORECASE)
         keyFile = re.sub(r'\b\w{1}\b', '', keyFile, flags=re.IGNORECASE)
         keyFile = re.sub(r'\b\w{2}\b', '', keyFile, flags=re.IGNORECASE)
         keyFile = re.sub(r'cw\w{6}', '', keyFile, flags=re.IGNORECASE)
-
-        for keyword in ["aditivo", "patrocínio", "réveillon", "vf", "pdf", "proposta", "sj", "-", "_", "(", ")"]:
-            if keyword in keyFile:
-                keyFile = keyFile.replace(keyword, "").strip()
+        keyFile = re.sub(r'\d{2,}', '', keyFile)
+        keyFile = re.sub(r" {2,}", " ", keyFile)
 
         if "[" in keyFile:
             keyFile = keyFile.split("[")[0]
+
+        for keyword in ["aditivo", "patrocínio", "contrato", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+            if keyword in keyFile:
+                keyFile = keyFile.replace(keyword, "").strip()
 
         keyFile = " ".join(keyFile.split()).strip()
 
@@ -131,12 +134,15 @@ while True:
             findFolder = False
 
             for destinoFile in finalFolder:
-                
-                for keyword in ["[confidencial]", "patrocínio", "réveillon", "vf", "pdf", "proposta", "sj", "-", "_", "(", ")"]:
-                    if keyword in keyFile:
-                        keyFile = keyFile.replace(keyword, "").strip()
-
                 folderKey = destinoFile.split('[')[0].strip().lower()
+                folderKey = re.sub(r'\b\w{1}\b', '', folderKey, flags=re.IGNORECASE)
+                folderKey = re.sub(r'\b\w{2}\b', '', folderKey, flags=re.IGNORECASE)
+                keyFile = re.sub(r'\d{2,}', '', keyFile)
+                folderKey = re.sub(r" {2,}", " ", folderKey)
+
+                for keyword in ["confidencial", "patrocínio", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+                    if keyword in folderKey:
+                        folderKey = folderKey.replace(keyword, "").strip()
                 
                 print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
