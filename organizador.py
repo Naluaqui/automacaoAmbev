@@ -26,7 +26,10 @@ def renameFiles(file, local, destinoFile):
     renameFile = "[ASSINADO] " + file
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
-    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}")
+    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}") 
+    for doc in os.listdir(mkdir):
+        if doc == renameFile:
+            os.remove(newFilePath)
     print(f"\n**OK** Arquivo movido com sucesso!\n\n{25*"="}\n\n")
     return newFilePath
 
@@ -138,7 +141,7 @@ while True:
                 folderKey = re.sub(r'\b\w{1}\b', '', folderKey, flags=re.IGNORECASE)
                 folderKey = re.sub(r'\b\w{2}\b', '', folderKey, flags=re.IGNORECASE)
                 keyFile = re.sub(r'\d{2,}', '', keyFile)
-                folderKey = re.sub(r" {2,}", " ", folderKey)
+                keyFile = re.sub(r" {2,}", " ", keyFile)
 
                 for keyword in ["confidencial", "patrocínio", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
                     if keyword in folderKey:
