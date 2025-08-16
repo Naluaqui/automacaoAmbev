@@ -26,10 +26,14 @@ def renameFiles(file, local, destinoFile):
     renameFile = "[ASSINADO] " + file
     newFilePath = os.path.join(mkdir, renameFile)
     shutil.move(local, newFilePath)
-    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}") 
+    print(f"\n>>> >>> Movendo arquivo: {file} para {newFilePath}")
+    count = 0
     for doc in os.listdir(mkdir):
         if doc == renameFile:
-            os.remove(newFilePath)
+            count += 1
+            if count == 2:
+                os.remove(doc)
+
     print(f"\n**OK** Arquivo movido com sucesso!\n\n{25*"="}\n\n")
     return newFilePath
 
@@ -115,12 +119,12 @@ while True:
         keyFile = re.sub(r'\b\w{2}\b', '', keyFile, flags=re.IGNORECASE)
         keyFile = re.sub(r'cw\w{6}', '', keyFile, flags=re.IGNORECASE)
         keyFile = re.sub(r'\d{2,}', '', keyFile)
-        keyFile = re.sub(r" {2,}", " ", keyFile)
+        keyFile = re.sub(r" {2,}", '', keyFile)
 
         if "[" in keyFile:
             keyFile = keyFile.split("[")[0]
 
-        for keyword in ["aditivo", "patrocínio", "contrato", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+        for keyword in ["aditivo", "patrocínio", "patrocinio", "réveillon", "reveillon", "contrato", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
             if keyword in keyFile:
                 keyFile = keyFile.replace(keyword, "").strip()
 
@@ -137,15 +141,18 @@ while True:
             findFolder = False
 
             for destinoFile in finalFolder:
-                folderKey = destinoFile.split('[')[0].strip().lower()
+                folderKey = destinoFile.lower()
+                folderKey = folderKey.replace('[confidencial]', '')
+                folderKey = folderKey.split('[')[0].strip()
                 folderKey = re.sub(r'\b\w{1}\b', '', folderKey, flags=re.IGNORECASE)
                 folderKey = re.sub(r'\b\w{2}\b', '', folderKey, flags=re.IGNORECASE)
-                keyFile = re.sub(r'\d{2,}', '', keyFile)
-                keyFile = re.sub(r" {2,}", " ", keyFile)
+                folderKey = re.sub(r'\d{2,}', '', folderKey)
+                folderKey = re.sub(r" {2,}", " ", folderKey)
 
-                for keyword in ["confidencial", "patrocínio", "réveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
+                for keyword in ["confidencial", "patrocínio", "patrocinio", "réveillon", "reveillon", "pdf", "proposta", "-", "_", "(", ")", ".", "[","]"]:
                     if keyword in folderKey:
                         folderKey = folderKey.replace(keyword, "").strip()
+                folderKey = " ".join(folderKey.split()).strip()
                 
                 print(f">>> >>> Comparando folderKey='{folderKey}' com keyFile='{keyFile}'")
                 time.sleep(1)
