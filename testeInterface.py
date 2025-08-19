@@ -1,64 +1,67 @@
-import tkinter as tk
-from tkinter import filedialog, messagebox
+import customtkinter  as ctk
 import os
+from tkinter import filedialog
+import subprocess
 
-def escolher_pasta(entry):
-    caminho = filedialog.askdirectory()
-    if caminho:
-        entry.delete(0, tk.END)
-        entry.insert(0, caminho)
 
-def salvar_config():
-    pasta_inicial = entry_inicial.get().strip()
-    pasta_final = entry_final.get().strip()
-
-    if not os.path.exists(pasta_inicial):
-        messagebox.showerror("Erro", "Pasta inicial inválida!")
-        return
-    if not os.path.exists(pasta_final):
-        messagebox.showerror("Erro", "Pasta final inválida!")
-        return
-
-    with open(configPath, "w", encoding="utf-8") as file:
-        file.writelines([pasta_inicial + "\n", pasta_final + "\n"])
-
-    messagebox.showinfo("Sucesso", "Configurações salvas!")
-
-# Inicialização e leitura do arquivo de config
 configPath = os.path.join(os.getenv("APPDATA"), "MeuApp", "config.txt")
-if not os.path.exists(configPath):
-    os.makedirs(os.path.dirname(configPath), exist_ok=True)
+ctk.set_appearance_mode("dark")
+
+app = ctk.CTk()
+app.title("Organizador de Arquivos")
+app.geometry("600x360")
+app.resizable(False, False)
+
+def fileExplorer(entryField):
+    directory = filedialog.askdirectory(title="Selecione a pasta")
+    if directory:
+        entryField.delete(0, "end")
+        entryField.insert(0, directory)
+
+def rodarScript():
+    subprocess.Popen(["python", "organizador.py"])
+
+def saveConfig():
+    initialInput = label1.get().strip()
+    finalInput = label2.get().strip()
+
     with open(configPath, "w", encoding="utf-8") as f:
-        f.write("PastaInicial\nPastaFinal\n")
+        f.write(initialInput + "\n")
+        f.write(finalInput + "\n")
 
-with open(configPath, "r", encoding="utf-8") as f:
-    lines = f.readlines()
-    initialPath = lines[0].strip()
-    finalPath = lines[1].strip()
+ctk.CTkButton(app, text="Iniciar Script", command=rodarScript).pack(pady=20)
 
-# Interface Tkinter
-root = tk.Tk()
-root.title("Configurar Pastas")
 
-tk.Label(root, text="Pasta Inicial:").pack()
-frame_inicial = tk.Frame(root)
-frame_inicial.pack()
-entry_inicial = tk.Entry(frame_inicial, width=50)
-entry_inicial.pack(side=tk.LEFT, padx=5)
-entry_inicial.insert(0, initialPath)
-btn_inicial = tk.Button(frame_inicial, text="Selecionar", command=lambda: escolher_pasta(entry_inicial))
-btn_inicial.pack(side=tk.LEFT)
+tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
+tittle.pack(pady=10)
 
-tk.Label(root, text="Pasta Final:").pack()
-frame_final = tk.Frame(root)
-frame_final.pack()
-entry_final = tk.Entry(frame_final, width=50)
-entry_final.pack(side=tk.LEFT, padx=5)
-entry_final.insert(0, finalPath)
-btn_final = tk.Button(frame_final, text="Selecionar", command=lambda: escolher_pasta(entry_final))
-btn_final.pack(side=tk.LEFT)
+frame1 = ctk.CTkFrame(app, fg_color="transparent")
+frame1.pack(pady=10)
 
-btn_salvar = tk.Button(root, text="Salvar Configuração", command=salvar_config)
-btn_salvar.pack(pady=20)
+tittleInput1 = ctk.CTkLabel(frame1, text="Pasta Inicial:")
+tittleInput1.pack(pady=20, side=ctk.LEFT, padx=10)
 
-root.mainloop()
+label1 = ctk.CTkEntry(frame1, placeholder_text="Digite o caminho da pasta inicial", width=400)
+label1.pack(pady=20, side=ctk.LEFT, padx=2)
+
+button1 = ctk.CTkButton(frame1, text="Achar Pasta", command=lambda: fileExplorer(label1))
+button1.pack(pady=20, side=ctk.LEFT, padx=10)
+
+frame2 = ctk.CTkFrame(app, fg_color="transparent")
+frame2.pack(pady=10)
+
+tittleInput2 = ctk.CTkLabel(frame2, text="Pasta FInal:")
+tittleInput2.pack(pady=20, side=ctk.LEFT, padx=10)
+
+label2 = ctk.CTkEntry(frame2, placeholder_text="Digite o caminho da pasta final", width=400)
+label2.pack(pady=20, side=ctk.LEFT, padx=6)
+
+button2 = ctk.CTkButton(frame2, text="Achar Pasta", command=lambda: fileExplorer(label2))
+button2.pack(pady=20, side=ctk.LEFT, padx=10)
+
+button3 = ctk.CTkButton(app, text="Salvar configurações", command=saveConfig)
+button3.pack(pady=20)
+
+
+app.mainloop()
+
