@@ -6,7 +6,6 @@ import ctypes
 from inputimeout import inputimeout, TimeoutOccurred
 
 configPathTeste = ""
-flag_file = "stop_flag.txt"
 
 def inicialSettings():
     global configPathTeste
@@ -45,8 +44,9 @@ with open(configPath, "r", encoding="utf-8") as file:
 
 def configFolderPath():
     global configPath
-
     try:
+
+
         try:
             with open(configPath, "r", encoding="utf-8") as file:
                 lines = file.readlines()
