@@ -19,6 +19,7 @@ def runScript():
     openSecondCtk()
 
 def saveConfig():
+
     initialInput = labelInitialFolder.get().strip()
     finalInput = labelFinalFolder.get().strip()
 
@@ -26,11 +27,22 @@ def saveConfig():
         f.write(initialInput + "\n")
         f.write(finalInput + "\n")
 
+    labelInitialFolder.delete(0, "end")
+    labelFinalFolder.delete(0, "end")
+
+
 def onSecondCtkClose():
     with open("stop_flag.txt", "w") as f:
         f.write("stop")
 
     secondCtk.destroy()
+
+def showFolder():
+
+    with open(configPath, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+                initialPath = lines[0].strip()
+                finalPath = lines[1].strip()
 
 def openSecondCtk():
     global secondCtk
@@ -45,53 +57,65 @@ def openSecondCtk():
     label = ctk.CTkLabel(secondCtk, text="Essa é a segunda tela!")
     label.pack(pady=20)
 
-    buttonBack = ctk.CTkButton(frameMainBellow, text="Salvar configurações", command=lambda: [secondCtk.destroy(), mainApp()])
+    frameSecondOnTop = ctk.CTkFrame(secondCtk, fg_color="transparent")
+    frameSecondOnTop.pack(pady=10)
+
+    tittleSecondInitial = ctk.CTkLabel(frameSecondOnTop, text="Aquivos iniciais encontrados")
+    tittleSecondInitial.pack(pady=20, side=ctk.LEFT, padx=10)
+
+    buttonBack = ctk.CTkButton(secondCtk, text="Voltar", command=lambda: [secondCtk.destroy(), mainApp()])
     buttonBack.pack(pady=20, side=ctk.LEFT, padx=10)
 
 def mainApp():
     global app
     global labelInitialFolder, labelFinalFolder, frameMainBellow
 
-    app = ctk.CTk()
-    app.title("Organizador de Arquivos")
-    app.geometry("650x320")
-    app.resizable(False, False)
+    try:
 
-    tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
-    tittle.pack(pady=10)
+        app = ctk.CTk()
+        app.title("Organizador de Arquivos")
+        app.geometry("650x320")
+        app.resizable(False, False)
 
-    frameMainOnTop = ctk.CTkFrame(app, fg_color="transparent")
-    frameMainOnTop.pack(pady=10)
+        tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
+        tittle.pack(pady=10)
 
-    tittleInput1 = ctk.CTkLabel(frameMainOnTop, text="Pasta Inicial:")
-    tittleInput1.pack(pady=20, side=ctk.LEFT, padx=10)
+        frameMainOnTop = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainOnTop.pack(pady=10)
 
-    labelInitialFolder = ctk.CTkEntry(frameMainOnTop, placeholder_text="Digite o caminho da pasta inicial", width=400)
-    labelInitialFolder.pack(pady=20, side=ctk.LEFT, padx=2)
+        tittleInput1 = ctk.CTkLabel(frameMainOnTop, text="Pasta Inicial:")
+        tittleInput1.pack(pady=20, side=ctk.LEFT, padx=10)
 
-    buttonFindFolder1 = ctk.CTkButton(frameMainOnTop, text="Achar Pasta", command=lambda: fileExplorer(labelInitialFolder))
-    buttonFindFolder1.pack(pady=20, side=ctk.LEFT, padx=10)
+        labelInitialFolder = ctk.CTkEntry(frameMainOnTop, placeholder_text="Digite o caminho da pasta inicial", width=400)
+        labelInitialFolder.pack(pady=20, side=ctk.LEFT, padx=2)
 
-    frameMainAmoung = ctk.CTkFrame(app, fg_color="transparent")
-    frameMainAmoung.pack(pady=10)
+        buttonFindFolder1 = ctk.CTkButton(frameMainOnTop, text="Achar Pasta", command=lambda: fileExplorer(labelInitialFolder))
+        buttonFindFolder1.pack(pady=20, side=ctk.LEFT, padx=10)
 
-    tittleInput2 = ctk.CTkLabel(frameMainAmoung, text="Pasta Final:")
-    tittleInput2.pack(pady=20, side=ctk.LEFT, padx=10)
+        frameMainAmoung = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainAmoung.pack(pady=10)
 
-    labelFinalFolder = ctk.CTkEntry(frameMainAmoung, placeholder_text="Digite o caminho da pasta final", width=400)
-    labelFinalFolder.pack(pady=20, side=ctk.LEFT, padx=6)
+        tittleInput2 = ctk.CTkLabel(frameMainAmoung, text="Pasta Final:")
+        tittleInput2.pack(pady=20, side=ctk.LEFT, padx=10)
 
-    buttonFindFolder2 = ctk.CTkButton(frameMainAmoung, text="Achar Pasta", command=lambda: fileExplorer(labelFinalFolder))
-    buttonFindFolder2.pack(pady=20, side=ctk.LEFT, padx=10)
+        labelFinalFolder = ctk.CTkEntry(frameMainAmoung, placeholder_text="Digite o caminho da pasta final", width=400)
+        labelFinalFolder.pack(pady=20, side=ctk.LEFT, padx=6)
 
-    frameMainBellow = ctk.CTkFrame(app, fg_color="transparent")
-    frameMainBellow.pack(pady=10)
+        buttonFindFolder2 = ctk.CTkButton(frameMainAmoung, text="Achar Pasta", command=lambda: fileExplorer(labelFinalFolder))
+        buttonFindFolder2.pack(pady=20, side=ctk.LEFT, padx=10)
 
-    button3 = ctk.CTkButton(frameMainBellow, text="Salvar configurações", command=saveConfig)
-    button3.pack(pady=20, side=ctk.LEFT, padx=10)
+        frameMainBellow = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainBellow.pack(pady=10)
 
-    ctk.CTkButton(frameMainBellow, text="Iniciar Script", command=runScript).pack(pady=20, side=ctk.LEFT, padx=10)
+        button3 = ctk.CTkButton(frameMainBellow, text="Salvar configurações", command=saveConfig)
+        button3.pack(pady=20, side=ctk.LEFT, padx=10)
 
-    app.mainloop()
+        ctk.CTkButton(frameMainBellow, text="Iniciar Script", command=runScript).pack(pady=20, side=ctk.LEFT, padx=10)
+
+        app.mainloop()
+
+    except Exception:
+        return
+
 
 mainApp()
