@@ -46,8 +46,6 @@ def showFolder():
     initialFolder = os.listdir(initialPath)
     finalFolder = os.listdir(finalPath)
 
-    label
-
     return initialFolder
 
 def openSecondCtk():
@@ -71,6 +69,8 @@ def openSecondCtk():
 
     buttonBack = ctk.CTkButton(secondCtk, text="Voltar", command=lambda: [secondCtk.destroy(), mainApp()])
     buttonBack.pack(pady=20, side=ctk.LEFT, padx=10)
+
+    secondCtk.mainloop()
 
 def mainApp():
     global app
