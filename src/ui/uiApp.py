@@ -38,11 +38,17 @@ def onSecondCtkClose():
     secondCtk.destroy()
 
 def showFolder():
-
     with open(configPath, "r", encoding="utf-8") as file:
-                lines = file.readlines()
-                initialPath = lines[0].strip()
-                finalPath = lines[1].strip()
+        lines = file.readlines()
+        initialPath = lines[0].strip()
+        finalPath = lines[1].strip()
+
+    initialFolder = os.listdir(initialPath)
+    finalFolder = os.listdir(finalPath)
+
+    label
+
+    return initialFolder
 
 def openSecondCtk():
     global secondCtk
@@ -54,7 +60,7 @@ def openSecondCtk():
     secondCtk.geometry("650x320")
     secondCtk.resizable(False, False)
 
-    label = ctk.CTkLabel(secondCtk, text="Essa é a segunda tela!")
+    label = ctk.CTkLabel(secondCtk, text=showFolder())
     label.pack(pady=20)
 
     frameSecondOnTop = ctk.CTkFrame(secondCtk, fg_color="transparent")

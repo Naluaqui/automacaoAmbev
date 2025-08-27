@@ -99,7 +99,6 @@ while True:
     initialFolder = os.listdir(initialPath)
     finalFolder = os.listdir(finalPath)
 
-
     while len(initialFolder) == 0:
         with open(configPath, "r", encoding="utf-8") as file:
                 lines = file.readlines()
