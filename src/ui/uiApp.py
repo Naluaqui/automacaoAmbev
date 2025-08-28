@@ -91,13 +91,15 @@ def mainApp():
         app = ctk.CTk()
         app.title("Organizador de Arquivos")
         app.geometry("650x320")
-        app.configure(bg = "#1B0C1A")
         app.resizable(False, False)
 
-        tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
+        frame = ctk.CTkFrame(app, fg_color="#101C29")
+        frame.pack(fill="both", expand=True)
+
+        tittle = ctk.CTkLabel(frame, text="Bem-vindo ao Organizador de Arquivos!")
         tittle.pack(pady=10)
 
-        frameMainOnTop = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainOnTop = ctk.CTkFrame(frame, fg_color="transparent")
         frameMainOnTop.pack(pady=10)
 
         tittleInput1 = ctk.CTkLabel(frameMainOnTop, text="Pasta Inicial:")
@@ -109,7 +111,7 @@ def mainApp():
         buttonFindFolder1 = ctk.CTkButton(frameMainOnTop, text="Achar Pasta", command=lambda: fileExplorer(labelInitialFolder))
         buttonFindFolder1.pack(pady=20, side=ctk.LEFT, padx=10)
 
-        frameMainAmoung = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainAmoung = ctk.CTkFrame(frame, fg_color="transparent")
         frameMainAmoung.pack(pady=10)
 
         tittleInput2 = ctk.CTkLabel(frameMainAmoung, text="Pasta Final:")
@@ -121,7 +123,7 @@ def mainApp():
         buttonFindFolder2 = ctk.CTkButton(frameMainAmoung, text="Achar Pasta", command=lambda: fileExplorer(labelFinalFolder))
         buttonFindFolder2.pack(pady=20, side=ctk.LEFT, padx=10)
 
-        frameMainBellow = ctk.CTkFrame(app, fg_color="transparent")
+        frameMainBellow = ctk.CTkFrame(frame, fg_color="transparent")
         frameMainBellow.pack(pady=10)
 
         button3 = ctk.CTkButton(frameMainBellow, text="Salvar configurações", command=saveConfig)
