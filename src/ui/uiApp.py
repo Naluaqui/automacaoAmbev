@@ -37,19 +37,8 @@ def onSecondCtkClose():
 
     secondCtk.destroy()
 
-def showFolder():
-    with open(configPath, "r", encoding="utf-8") as file:
-        lines = file.readlines()
-        initialPath = lines[0].strip()
-        finalPath = lines[1].strip()
-
-    initialFolder = os.listdir(initialPath)
-    finalFolder = os.listdir(finalPath)
-
-    return initialFolder
-
 def openSecondCtk():
-    global secondCtk
+    global secondCtk, label, initial
 
     app.destroy()
     secondCtk = ctk.CTkToplevel()
@@ -58,10 +47,10 @@ def openSecondCtk():
     secondCtk.geometry("650x320")
     secondCtk.resizable(False, False)
 
-    label = ctk.CTkLabel(secondCtk, text=showFolder())
+    label = ctk.CTkLabel(secondCtk, text="Teste")
     label.pack(pady=20)
 
-    frameSecondOnTop = ctk.CTkFrame(secondCtk, fg_color="transparent")
+    frameSecondOnTop = ctk.CTkFrame(secondCtk, fg_color="blue")
     frameSecondOnTop.pack(pady=10)
 
     tittleSecondInitial = ctk.CTkLabel(frameSecondOnTop, text="Aquivos iniciais encontrados")
