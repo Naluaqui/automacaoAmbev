@@ -6,12 +6,30 @@ import time
 
 configPath = os.path.join(os.getenv("APPDATA"), "MeuApp", "config.txt")
 ctk.set_appearance_mode("dark")
+initial = "initial"
+final = "final"
+
 
 def fileExplorer(entryField):
     directory = filedialog.askdirectory(title="Selecione a pasta")
     if directory:
         entryField.delete(0, "end")
         entryField.insert(0, directory)
+
+def showFolder(folder):
+    with open(configPath, "r", encoding="utf-8") as file:
+        lines = file.readlines()
+        initialPath = lines[0].strip()
+        finalPath = lines[1].strip()
+
+    initialFolder = os.listdir(initialPath)
+    finalFolder = os.listdir(finalPath)
+
+    if folder == initial:
+        return initialFolder
+
+    else:
+        return finalFolder
 
 def runScript():
     subprocess.Popen(["python", "uiBase.py"])
@@ -38,7 +56,7 @@ def onSecondCtkClose():
     secondCtk.destroy()
 
 def openSecondCtk():
-    global secondCtk, label, initial
+    global secondCtk, label, initial, final
 
     app.destroy()
     secondCtk = ctk.CTkToplevel()
@@ -47,8 +65,11 @@ def openSecondCtk():
     secondCtk.geometry("650x320")
     secondCtk.resizable(False, False)
 
-    label = ctk.CTkLabel(secondCtk, text="Teste")
-    label.pack(pady=20)
+    labelIni = ctk.CTkLabel(secondCtk, text=showFolder(initial))
+    labelIni.pack(pady=20)
+
+    labelFil = ctk.CTkLabel(secondCtk, text=showFolder(final))
+    labelFil.pack(pady=20)
 
     frameSecondOnTop = ctk.CTkFrame(secondCtk, fg_color="blue")
     frameSecondOnTop.pack(pady=10)
@@ -70,6 +91,7 @@ def mainApp():
         app = ctk.CTk()
         app.title("Organizador de Arquivos")
         app.geometry("650x320")
+        app.configure(bg = "#1B0C1A")
         app.resizable(False, False)
 
         tittle = ctk.CTkLabel(app, text="Bem-vindo ao Organizador de Arquivos!")
