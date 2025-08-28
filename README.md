@@ -6,7 +6,7 @@ _Automatização da organização de arquivos, permitindo o armazenamento corret
 
 ## 🛠️ Instalação
 ```bash
-git clone https://github.com/owner/repo.git
+git clone https://github.com/Naluaqui/automacaoAmbev.git
 cd automacaoAmbev
 pip install inputimeout
 pip install customtkinter
